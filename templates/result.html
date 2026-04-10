@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Results — DineFind</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --green: #0077b6;
+        --green-dark: #005f8e;
+        --green-light: #e0f4ff;
+        --green-mid: #0096c7;
+        --white: #ffffff;
+        --bg: linear-gradient(145deg, #e8f6ff 0%, #d0eeff 60%, #eaf7ff 100%);
+        --text: #0a1e2e;
+        --muted: #4a7c99;
+        --shadow-sm: 0 2px 12px rgba(0, 119, 182, 0.08);
+        --shadow-md: 0 8px 32px rgba(0, 119, 182, 0.12);
+        --radius: 16px;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ── NAVBAR ── */
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 60px;
+        background: var(--white);
+        box-shadow: var(--shadow-sm);
+        position: relative;
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--green);
+        text-decoration: none;
+      }
+      .nav-links {
+        display: flex;
+        gap: 24px;
+        align-items: center;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: var(--muted);
+        font-weight: 500;
+        font-size: 14px;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--green);
+      }
+      .nav-cta {
+        background: var(--green) !important;
+        color: var(--white) !important;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: 600 !important;
+        font-size: 13px !important;
+      }
+
+      /* ── RESULTS HEADER ── */
+      .results-header {
+        padding: 48px 60px 0;
+      }
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 24px;
+        transition: color 0.2s;
+      }
+      .back-link:hover {
+        color: var(--green);
+      }
+
+      .result-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 36px;
+      }
+      .result-meta h1 {
+        font-size: 26px;
+        font-weight: 700;
+      }
+      .result-meta h1 span {
+        color: var(--green);
+      }
+      .result-count {
+        background: var(--green-light);
+        color: var(--green);
+        font-size: 13px;
+        font-weight: 600;
+        padding: 6px 16px;
+        border-radius: 50px;
+      }
+
+      /* ── GRID ── */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+        padding: 0 60px 60px;
+      }
+
+      .card {
+        background: var(--white);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        padding: 28px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--green), var(--green-mid));
+      }
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .card-rank {
+        position: absolute;
+        top: 16px;
+        right: 18px;
+        width: 28px;
+        height: 28px;
+        background: var(--green-light);
+        color: var(--green);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .card-name {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--text);
+        padding-right: 36px;
+        line-height: 1.3;
+      }
+
+      .card-cuisine {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--muted);
+        background: #f0f9ff;
+        padding: 6px 12px;
+        border-radius: 8px;
+      }
+      .card-cuisine i {
+        color: var(--green);
+        font-size: 12px;
+      }
+
+      .card-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: 4px;
+      }
+
+      .rating-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--green-light);
+        color: var(--green);
+        font-size: 14px;
+        font-weight: 700;
+        padding: 7px 14px;
+        border-radius: 10px;
+        flex: 1;
+      }
+      .rating-badge i {
+        font-size: 12px;
+      }
+
+      .budget-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: #f0f9ff;
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 600;
+        padding: 7px 14px;
+        border-radius: 10px;
+        flex: 1;
+      }
+      .budget-badge span {
+        color: var(--muted);
+        font-weight: 400;
+        font-size: 12px;
+      }
+
+      /* ── EMPTY STATE ── */
+      .empty-state {
+        text-align: center;
+        padding: 80px 40px;
+      }
+      .empty-icon {
+        font-size: 52px;
+        color: var(--green-light);
+        margin-bottom: 20px;
+      }
+      .empty-state h2 {
+        font-size: 22px;
+        margin-bottom: 10px;
+      }
+      .empty-state p {
+        color: var(--muted);
+        font-size: 15px;
+        margin-bottom: 28px;
+      }
+
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--green);
+        color: var(--white);
+        padding: 12px 28px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.25s;
+      }
+      .btn-primary:hover {
+        background: var(--green-dark);
+      }
+
+      /* ── FOOTER ── */
+      footer {
+        text-align: center;
+        padding: 24px;
+        color: var(--muted);
+        font-size: 13px;
+        border-top: 1px solid #cce6f7;
+        margin-top: auto;
+      }
+
+      /* ── HAMBURGER ── */
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        padding: 4px;
+        background: none;
+        border: none;
+      }
+      .nav-toggle span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: var(--green);
+        border-radius: 2px;
+      }
+
+      /* ── TABLET ── */
+      @media (max-width: 1024px) {
+        nav { padding: 16px 32px; }
+        .results-header { padding: 36px 32px 0; }
+        .grid { padding: 0 32px 48px; grid-template-columns: repeat(2, 1fr); }
+      }
+
+      /* ── MOBILE ── */
+      @media (max-width: 768px) {
+        nav { padding: 14px 20px; }
+        .nav-toggle { display: flex; }
+        .nav-links {
+          display: none;
+          position: absolute;
+          top: 100%; left: 0; right: 0;
+          background: var(--white);
+          flex-direction: column;
+          gap: 0;
+          padding: 12px 0 16px;
+          box-shadow: 0 8px 24px rgba(0,119,182,0.12);
+          z-index: 200;
+        }
+        .nav-links.open { display: flex; }
+        .nav-links a { padding: 12px 24px; font-size: 15px; border-bottom: 1px solid #f0f7ff; }
+        .nav-cta { margin: 10px 20px 0 !important; border-radius: 50px !important; text-align: center; }
+        .results-header { padding: 28px 20px 0; }
+        .result-meta h1 { font-size: 20px; }
+        .grid { padding: 0 20px 40px; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .card { padding: 20px 16px; }
+        .card-name { font-size: 15px; }
+      }
+
+      /* ── SMALL MOBILE ── */
+      @media (max-width: 480px) {
+        .grid { grid-template-columns: 1fr; }
+        .result-meta { flex-direction: column; align-items: flex-start; gap: 10px; }
+        .result-meta h1 { font-size: 18px; }
+        footer { font-size: 12px; padding: 18px 16px; }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a class="nav-brand" href="/">
+        <svg width="36" height="36" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="42" height="42" rx="12" fill="white" stroke="#0077b6" stroke-width="1.5"/>
+          <path d="M15 10 L15 20 Q15 25 21 25 Q27 25 27 20 L27 10" stroke="#0077b6" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <path d="M21 25 L21 32" stroke="#0077b6" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M16 32 L26 32" stroke="#0077b6" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="31" cy="12" r="4" fill="#00b4d8"/>
+          <path d="M29.5 12 L30.5 13 L32.5 11" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        DineFind
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <a href="/">Home</a>
+        <a href="/recommend" class="nav-cta"
+          ><i class="fa-solid fa-magnifying-glass"></i> New Search</a
+        >
+      </div>
+    </nav>
+    <script>
+      document.getElementById('navToggle').addEventListener('click', function() {
+        document.getElementById('navLinks').classList.toggle('open');
+      });
+    </script>
+
+    <div class="results-header">
+      <a href="/recommend" class="back-link"
+        ><i class="fa-solid fa-arrow-left"></i> Back to Search</a
+      >
+      <div class="result-meta">
+        {% if search_name %}
+        <h1>Restaurants similar to <span>{{ search_name }}</span></h1>
+        {% else %}
+        <h1>Recommended <span>Restaurants</span></h1>
+        {% endif %}
+        <span class="result-count"
+          ><i class="fa-solid fa-list"></i> {{ recommended_restaurants|length }}
+          result{{ 's' if recommended_restaurants|length != 1 }}</span
+        >
+      </div>
+    </div>
+
+    {% if recommended_restaurants %}
+    <div class="grid">
+      {% for r in recommended_restaurants %}
+      <div class="card">
+        <div class="card-rank">{{ loop.index }}</div>
+        <div class="card-name">{{ r.name }}</div>
+        <div class="card-cuisine">
+          <i class="fa-solid fa-bowl-food"></i> {{ r.cuisines | title }}
+        </div>
+        <div class="card-row">
+          <div class="rating-badge">
+            <i class="fa-solid fa-star"></i>
+            {{ "%.1f" | format(r['Mean Rating']) }}
+          </div>
+          <div class="budget-badge">
+            ₹{{ "%.0f" | format(r.cost) }} <span>/ person</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon"><i class="fa-solid fa-plate-utensils"></i></div>
+      <h2>No Results Found</h2>
+      <p>
+        Try adjusting your filters or searching with a different restaurant
+        name.
+      </p>
+      <a href="/recommend" class="btn-primary"
+        ><i class="fa-solid fa-arrow-left"></i> Try Again</a
+      >
+    </div>
+    {% endif %}
+
+    <footer>
+      © 2026 DineFind &nbsp;·&nbsp; Developed by ·&nbsp; Mohammadkaif Mulla
+    </footer>
+  </body>
+</html>
